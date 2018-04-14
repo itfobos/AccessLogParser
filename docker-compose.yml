@@ -1,0 +1,11 @@
+mysql:
+  image: mysql:5.7.21
+  ports:
+    - "3306:3306"
+  environment:
+    - MYSQL_USER=logadmmin
+    - MYSQL_PASSWORD=abcd
+    - MYSQL_DATABASE=access_log
+    - MYSQL_RANDOM_ROOT_PASSWORD=true
+#  volumes:
+#    - "./conf.d:/etc/mysql/conf.d:ro"
