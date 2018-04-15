@@ -15,7 +15,7 @@ apply plugin: 'io.spring.dependency-management'
 
 bootJar {
     baseName = 'access-logs-parser'
-    version =  '0.1.0'
+    version = '0.1.0'
 }
 
 repositories {
@@ -31,6 +31,9 @@ dependencies {
 
     // Use MySQL Connector-J
     compile 'mysql:mysql-connector-java'
+
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
+
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
