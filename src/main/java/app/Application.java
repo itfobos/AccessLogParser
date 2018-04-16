@@ -1,6 +1,12 @@
 package app;
 
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 import app.cli.CliParser;
+import app.parsing.FileParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +21,8 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 )
 public class Application {
 
+	private static final Logger logger = LoggerFactory.getLogger(Application.class);
+
 	public static void main(String[] args) {
 		CliParser cliParser = CliParser.fromCliArgs(args);
 		if (cliParser.argumentsAreCorrect()) {
@@ -28,9 +36,23 @@ public class Application {
 	}
 
 	@Bean
-	CommandLineRunner runner() {
+	CommandLineRunner runner(FileParser fileParser) {
 		return args -> {
-			//TODO:
+			CliParser cliParser = CliParser.fromCliArgs(args);
+
+			final long startTime = System.currentTimeMillis();
+			try {
+				fileParser.parseAndPersistLog(cliParser.getLogFile());
+			} catch (IOException e) {
+				System.err.println("Unable to parse '" +
+						cliParser.getLogFile().getPath() + "' file: " +
+						e.getMessage());
+				throw e;
+			}
+
+			long executionTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime);
+
+			logger.info("Execution took: {} sec.", executionTime);
 		};
 	}
 }
