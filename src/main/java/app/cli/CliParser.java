@@ -1,5 +1,6 @@
 package app.cli;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class CliParser {
 	private Date startDate;
 	private TimeUnit duration;
 	private int threshold;
+	private File logFile;
 
 	private CliParser() {
 	}
@@ -68,6 +70,14 @@ public class CliParser {
 			this.errors.add(e.getMessage());
 		}
 
+		String logFilePath = commandLine.getOptionValue(ACCESSLOG_OPT);
+		logFile = new File(logFilePath);
+		if (!logFile.exists()) {
+			errors.add("Defined log file '" + logFilePath + "' does not exist.");
+		} else if (logFile.isDirectory()) {
+			errors.add("Defined path '" + logFilePath + "' is directory.");
+		}
+
 	}
 
 	public boolean argumentsAreCorrect() {
@@ -97,12 +107,17 @@ public class CliParser {
 		return threshold;
 	}
 
+	public File getLogFile() {
+		return logFile;
+	}
+
 	private static final CommandLineParser PARSER = new DefaultParser();
 
 	private static final Options OPTIONS = new Options();
 	private static final String START_DATE_OPT = "startDate";
 	private static final String DURATION_OPT = "duration";
 	private static final String THRESHOLD_OPT = "threshold";
+	private static final String ACCESSLOG_OPT = "accesslog";
 
 	private static final DateFormat DATE_FORMAT;
 	private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd.HH:mm:ss";
@@ -129,6 +144,12 @@ public class CliParser {
 				.required()
 				.hasArg()
 				.desc("Positive integer value")
+				.build());
+
+		OPTIONS.addOption(Option.builder().longOpt(ACCESSLOG_OPT)
+				.required()
+				.hasArg()
+				.desc("/path/to/file")
 				.build());
 	}
 
