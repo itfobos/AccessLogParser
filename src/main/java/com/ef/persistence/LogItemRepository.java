@@ -1,4 +1,4 @@
-package app.persistence;
+package com.ef.persistence;
 
 import org.springframework.data.repository.CrudRepository;
 

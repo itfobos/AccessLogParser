@@ -1,4 +1,4 @@
-package app.parsing;
+package com.ef.parsing;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.stream.Stream;
 
-import app.persistence.CachingPersistService;
-import app.persistence.LogItem;
+import com.ef.persistence.CachingPersistService;
+import com.ef.persistence.LogItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package app.cli;
+package com.ef.cli;
 
 import org.apache.commons.cli.ParseException;
 

@@ -1,14 +1,14 @@
-package app;
+package com.ef;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import app.cli.CliParser;
-import app.parsing.FileParser;
-import app.persistence.BlockedAddress;
-import app.persistence.BlockerService;
+import com.ef.cli.CliParser;
+import com.ef.parsing.FileParser;
+import com.ef.persistence.BlockedAddress;
+import com.ef.persistence.BlockerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
@@ -21,16 +21,16 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 @SpringBootApplication
 @EntityScan(
-		basePackageClasses = { Application.class, Jsr310JpaConverters.class }
+		basePackageClasses = { Parser.class, Jsr310JpaConverters.class }
 )
-public class Application {
+public class Parser {
 
-	private static final Logger logger = LoggerFactory.getLogger(Application.class);
+	private static final Logger logger = LoggerFactory.getLogger(Parser.class);
 
 	public static void main(String[] args) {
 		CliParser cliParser = CliParser.fromCliArgs(args);
 		if (cliParser.argumentsAreCorrect()) {
-			SpringApplication app = new SpringApplication(Application.class);
+			SpringApplication app = new SpringApplication(Parser.class);
 			app.setBannerMode(Banner.Mode.OFF);
 			app.run(args);
 		} else {
