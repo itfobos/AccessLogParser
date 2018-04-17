@@ -1,10 +1,9 @@
 package app.cli;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -19,7 +18,7 @@ import org.apache.commons.cli.ParseException;
 public class CliParser {
 	private final List<String> errors = new ArrayList<>(OPTIONS.getRequiredOptions().size());
 
-	private Date startDate;
+	private LocalDateTime startDate;
 	private TimeUnit duration;
 	private int threshold;
 	private File logFile;
@@ -45,8 +44,8 @@ public class CliParser {
 		}
 
 		try {
-			startDate = DATE_FORMAT.parse(commandLine.getOptionValue(START_DATE_OPT));
-		} catch (java.text.ParseException e) {
+			startDate = LocalDateTime.parse(commandLine.getOptionValue(START_DATE_OPT), DATE_FORMATTER);
+		} catch (Exception e) {
 			this.errors.add(e.getMessage());
 		}
 
@@ -95,7 +94,7 @@ public class CliParser {
 		HELP_FORMATTER.printHelp("parser", OPTIONS);
 	}
 
-	public Date getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
 
@@ -119,13 +118,13 @@ public class CliParser {
 	private static final String THRESHOLD_OPT = "threshold";
 	private static final String ACCESSLOG_OPT = "accesslog";
 
-	private static final DateFormat DATE_FORMAT;
+	private static final DateTimeFormatter DATE_FORMATTER;
 	private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd.HH:mm:ss";
 
 	private static final HelpFormatter HELP_FORMATTER = new HelpFormatter();
 
 	static {
-		DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT_PATTERN);
+		DATE_FORMATTER = DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN);
 
 		OPTIONS.addOption(Option.builder().longOpt(START_DATE_OPT)
 				.required()

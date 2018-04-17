@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import app.cli.CliParser;
 import app.parsing.FileParser;
+import app.persistence.BlockerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
@@ -36,7 +37,7 @@ public class Application {
 	}
 
 	@Bean
-	CommandLineRunner runner(FileParser fileParser) {
+	CommandLineRunner runner(FileParser fileParser, BlockerService blockerService) {
 		return args -> {
 			CliParser cliParser = CliParser.fromCliArgs(args);
 
@@ -51,8 +52,15 @@ public class Application {
 			}
 
 			long executionTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime);
+			logger.info("Log import took: {} sec.", executionTime);
 
-			logger.info("Execution took: {} sec.", executionTime);
+			blockerService.analyzeLogAndBlockAddresses(cliParser.getStartDate(), cliParser.getDuration(),
+					cliParser.getThreshold());
+
+			logger.info("Blocked addresses: {}", blockerService.getBlockedAddresses());
+
+			logger.info("All execution took: {} sec.",
+					TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime));
 		};
 	}
 }

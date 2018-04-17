@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
-@Entity(name = "LOG_ITEMS")
+@Entity
+@Table(name = "LOG_ITEMS")
 public class LogItem {
 
 	protected LogItem() {
@@ -20,36 +22,11 @@ public class LogItem {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	public Long id;
 
 	@Column(name = "ACCESSED", nullable = false)
-	private LocalDateTime accessed;
+	public LocalDateTime accessed;
 
 	@Column(name = "IP_ADDRESS", nullable = false)
-	private String ipAddress;
-
-	//TODO: Maybe we don't need getters/setters at all
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public LocalDateTime getAccessed() {
-		return accessed;
-	}
-
-	public void setAccessed(LocalDateTime accessed) {
-		this.accessed = accessed;
-	}
-
-	public String getIpAddress() {
-		return ipAddress;
-	}
-
-	public void setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
-	}
+	public String ipAddress;
 }
