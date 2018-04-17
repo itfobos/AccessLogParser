@@ -1,10 +1,13 @@
 package app;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import app.cli.CliParser;
 import app.parsing.FileParser;
+import app.persistence.BlockedAddress;
 import app.persistence.BlockerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,10 +57,15 @@ public class Application {
 			long executionTime = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime);
 			logger.info("Log import took: {} sec.", executionTime);
 
-			blockerService.analyzeLogAndBlockAddresses(cliParser.getStartDate(), cliParser.getDuration(),
-					cliParser.getThreshold());
+			blockerService.analyzeLogAndBlockAddresses(
+					cliParser.getStartDate(),
+					cliParser.getDuration(),
+					cliParser.getThreshold()
+			);
 
-			logger.info("Blocked addresses: {}", blockerService.getBlockedAddresses());
+			List<BlockedAddress> blockedAddresses = blockerService.getBlockedAddresses();
+			logger.info("Blocked addresses:\n {}",
+					blockedAddresses.stream().map(item -> '\n' + item.ipAddress).collect(Collectors.toList()));
 
 			logger.info("All execution took: {} sec.",
 					TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis() - startTime));

@@ -21,7 +21,7 @@ public class LogItem {
 	}
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
 
 	@Column(name = "ACCESSED", nullable = false)
